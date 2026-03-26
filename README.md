@@ -55,7 +55,7 @@ curl http://localhost:7350/v2/rpc/get_stats \
 
 ## Deploying to Google Cloud Platform (GCP)
 
-### Option 1: Using Cloud Run
+### Using Cloud Run
 
 1. **Build and push Docker image:**
    ```bash
@@ -79,53 +79,8 @@ curl http://localhost:7350/v2/rpc/get_stats \
      --allow-unauthenticated \
      --set-env-vars "NAKAMA_DATABASE_ADDRESS=your-postgres-connection-string"
    ```
+   current External IP for VM is 34.132.158.116
 
-### Option 2: Using Google Kubernetes Engine (GKE)
-
-1. **Create a GKE cluster:**
-   ```bash
-   gcloud container clusters create tic-tac-toe-cluster --num-nodes=2
-   ```
-
-2. **Deploy using Kubernetes manifests:**
-   - Create PersistentVolumeClaim for PostgreSQL
-   - Deploy PostgreSQL StatefulSet
-   - Deploy Nakama Deployment with the plugin volume mounted
-
-### Option 3: Using Compute Engine VM
-
-1. **Create a VM instance:**
-   ```bash
-   gcloud compute instances create nakama-server \
-     --image-family=ubuntu-2004-lts \
-     --image-project=ubuntu-os-cloud \
-     --machine-type=e2-medium
-   ```
-
-2. **Install Nakama and PostgreSQL on the VM:**
-   ```bash
-   # Install Docker
-   sudo apt update
-   sudo apt install docker.io
-
-   # Run PostgreSQL container
-   sudo docker run -d --name postgres -e POSTGRES_DB=nakama -e POSTGRES_PASSWORD=yourpassword -p 5432:5432 postgres:12
-
-   # Build and run Nakama with plugin
-   sudo docker run -d --name nakama \
-     -p 7350:7350 -p 7351:7351 \
-     -v /path/to/modules:/nakama/data/modules \
-     heroiclabs/nakama:3.22.0 \
-     /nakama/nakama --database.address postgres:yourpassword@localhost:5432/nakama
-   ```
-
-### Environment Variables
-
-Set these environment variables for production:
-
-- `NAKAMA_DATABASE_ADDRESS` - PostgreSQL connection string
-- `NAKAMA_SESSION_TOKEN_EXPIRY_SEC` - Session token expiry
-- `NAKAMA_LOG_LEVEL` - Logging level (INFO, DEBUG, etc.)
 
 ## Connecting from Godot
 
@@ -192,15 +147,6 @@ func show_game_result(result):
     pass
 ```
 
-### Matchmaking
-
-```gdscript
-# Create matchmaking ticket
-var ticket = yield(client.add_matchmaker_async("+properties.skill:>5 +properties.skill:<10", 2, 2), "completed")
-
-# The matchmaker_matched signal will be emitted when a match is found
-```
-
 ## Game Features
 
 - Real-time Tic-Tac-Toe matches
@@ -227,7 +173,3 @@ var ticket = yield(client.add_matchmaker_async("+properties.skill:>5 +properties
 2. Build the plugin: `go build -buildmode=plugin -o backend.so`
 3. Test locally with Docker Compose
 4. Commit and push changes
-
-## License
-
-This project is licensed under the MIT License.
