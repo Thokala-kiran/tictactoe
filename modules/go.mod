@@ -1,7 +1,7 @@
 module backend
 
-go 1.26.1
+go 1.22.4
 
-require github.com/heroiclabs/nakama-common v1.45.0
+require github.com/heroiclabs/nakama-common v1.32.0
 
-require google.golang.org/protobuf v1.36.11 // indirect
+require google.golang.org/protobuf v1.34.1 // indirect
