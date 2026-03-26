@@ -6,13 +6,32 @@ services:
     environment:
       POSTGRES_DB: nakama
       POSTGRES_PASSWORD: localdb
-    ports:
-      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   nakama:
-    image: heroiclabs/nakama:${NAKAMA_VERSION:-latest}
+    image: heroiclabs/nakama:3.22.0
     volumes:
       - ./modules:/nakama/data/modules
+    entrypoint:
+      - "/bin/sh"
+      - "-ecx"
+      - |
+        sleep 5 &&
+        /nakama/nakama migrate up --database.address postgres:localdb@postgres:5432/nakama &&
+        exec /nakama/nakama --name nakama1 --database.address postgres:localdb@postgres:5432/nakama --logger.level INFO
+    depends_on:
+      - postgres
+    ports:
+      - "7350:7350"
+      - "7351:7351"
+    restart: unless-stopped
+
+  volumes:
+    postgres_data:
+
+    - ./modules:/nakama/data/modules
     entrypoint:
     - "/bin/sh"
     - "-ecx"
