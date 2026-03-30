@@ -2,6 +2,12 @@
 
 This project implements a Tic-Tac-Toe game backend using Nakama, a distributed server for social and realtime games and apps. The backend is written in Go as a Nakama module/plugin.
 
+## 📱 Download APK
+
+You can download and test the Android app here:
+
+👉 [Download Tic-Tac-Toe APK](https://drive.google.com/file/d/1wVLg0m4TrNpCpdm0sUdeerzuhEbo3kP9/view?usp=drive_link)
+
 ## Project Structure
 
 - `modules/main.go` - Main module initialization and RPC handlers
